@@ -2,10 +2,8 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const app = express();
 
-app.use(express.urlencoded({ extended: true }));  // To parse form data
-app.use(cookieParser());  // To parse cookies
-
-// Serve the login form
+app.use(express.urlencoded({ extended: true }));  
+app.use(cookieParser());  
 app.get('/login', (req, res) => {
     res.send(`
         <form action="/login" method="POST">
@@ -22,18 +20,14 @@ app.get('/login', (req, res) => {
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
 
-    // For simplicity, using a hardcoded username/password
     if (username === 'admin' && password === 'password123') {
-        // Set a cookie to remember the login
         res.cookie('isLoggedIn', 'true', { maxAge: 3600, httpOnly: true });  
         return res.redirect('/products');
     }
 
-    // If login fails, redirect back to login page
     res.send('Invalid credentials, <a href="/login">try again</a>');
 });
 
-// Products page, accessible only if logged in
 app.get('/products', (req, res) => {
     if (req.cookies.isLoggedIn === 'true') {
         res.send(`
