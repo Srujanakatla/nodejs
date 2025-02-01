@@ -8,14 +8,23 @@ app.use(express.urlencoded({ extended: true }));
 console.log(__dirname, "dirname");
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    console.log(__dirname, "multer");
-    cb(null, __dirname + "./multer.js");
+    cb(null, __dirname + "/uploads");  
   },
   filename: (req, file, cb) => {
-    console.log(file);
     cb(null, file.originalname);
   },
 });
+
+// var storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     console.log(__dirname, "multer");
+//     cb(null, __dirname + "./multer.js");
+//   },
+//   filename: (req, file, cb) => {
+//     console.log(file);
+//     cb(null, file.originalname);
+//   },
+// });
 var upload = multer({ storage: storage });
 app.post("/register", upload.array("aa", 3), (req, res) => {
   res.send({
